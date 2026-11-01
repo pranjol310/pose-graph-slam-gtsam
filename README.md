@@ -8,13 +8,13 @@ Pose Graph SLAM is a graph-based approach to simultaneous localization and mappi
 The objective is to estimate the most likely robot trajectory by minimizing the error across all available constraints.
 In this project, I implemented a 2D pose graph optimization pipeline using GTSAM, including:
 
-- Parsing pose and constraint data from a .g2o dataset.
-- Representing robot poses using Pose2.
-- Constructing a nonlinear factor graph.
-- Adding prior and relative pose constraints.
-- Initializing pose estimates.
-- Optimizing the graph using the Levenberg–Marquardt algorithm.
-- Exporting initial and optimized trajectories for visualization.
+- Parsing pose and constraint data from a .g2o dataset
+- Representing robot poses using Pose2
+- Constructing a nonlinear factor graph
+- Adding prior and relative pose constraints
+- Initializing pose estimates
+- Optimizing the graph using the Levenberg–Marquardt algorithm
+- Exporting initial and optimized trajectories for visualization
 
 ## Technologies Used
 
@@ -26,8 +26,8 @@ This project uses the "Intel Research Lab 2D SLAM dataset", provided in the .g2o
 
 The dataset contains:
 
-- VERTEX_SE2: Contains a pose ID and its initial 2D pose estimate ((x,y,theta)).
-- EDGE_SE2: Contains two pose IDs, their relative transformation, and the associated information matrix.
+- VERTEX_SE2: Contains a pose ID and its initial 2D pose estimate (x,y,theta)
+- EDGE_SE2: Contains two pose IDs, their relative transformation, and the associated information matrix
   
 The dataset is used to construct the nonlinear factor graph.
 
@@ -85,11 +85,11 @@ pose_graph_slam/
 
 The project requires:
 
-- C++ compiler supporting C++11 or later.
-- CMake.
-- GTSAM.
-- Python 3.
-- Matplotlib.
+- C++ compiler supporting C++11 or later
+- CMake
+- GTSAM
+- Python 3
+- Matplotlib
 
 ## Building the Project
 
@@ -136,6 +136,6 @@ Initial vs. Optimized Trajectory
 
 
 
-**Project:** 2D Pose Graph SLAM using GTSAM
-**Language:** C++ / Python
+**Project:** 2D Pose Graph SLAM using GTSAM  
+**Language:** C++ / Python  
 **Domain:** Robotics, State Estimation, SLAM, Nonlinear Optimization
