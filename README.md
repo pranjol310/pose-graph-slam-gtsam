@@ -1,20 +1,26 @@
 # 2D Pose Graph SLAM using GTSAM
 
-A C++ implementation of "2D Pose Graph Simultaneous Localization and Mapping (SLAM)" using the GTSAM library. This project uses the Intel Research Lab dataset in the .g2o format to construct a nonlinear factor graph and optimize the robot trajectory using nonlinear least squares.
+A C++ implementation of 2D Pose Graph Simultaneous Localization and Mapping (SLAM) using the GTSAM library.
+This project uses the Intel Research Lab 2D SLAM dataset in .g2o format to construct a nonlinear factor graph and estimate the robot trajectory.
+Two optimization approaches are explored:
+1. Batch Optimization: Levenberg–Marquardt optimization over the complete factor graph.
+2. Incremental Optimization: Incremental smoothing and mapping using GTSAM's iSAM2 algorithm.
 
 ## Overview
 
-Pose Graph SLAM is a graph-based approach to simultaneous localization and mapping in which robot poses are represented as nodes and spatial constraints between poses are represented as edges.
+Pose Graph SLAM is a graph-based approach to simultaneous localization and mapping. Robot poses are represented as nodes, while spatial constraints between poses are represented as edges.
 The objective is to estimate the most likely robot trajectory by minimizing the error across all available constraints.
-In this project, I implemented a 2D pose graph optimization pipeline using GTSAM, including:
 
-- Parsing pose and constraint data from a .g2o dataset
-- Representing robot poses using Pose2
-- Constructing a nonlinear factor graph
-- Adding prior and relative pose constraints
-- Initializing pose estimates
-- Optimizing the graph using the Levenberg–Marquardt algorithm
-- Exporting initial and optimized trajectories for visualization
+The implementation includes:
+
+1. Parsing vertices and edges from .g2o datasets.
+2. Representing robot poses using GTSAM's Pose2.
+3. Constructing nonlinear factor graphs.
+4. Adding prior and relative pose constraints.
+5. Initializing pose estimates.
+6. Batch optimization using Levenberg–Marquardt.
+7. Incremental optimization using iSAM2.
+8. Exporting estimated trajectories for visualization.
 
 ## Technologies Used
 
@@ -56,7 +62,20 @@ These estimates provide the starting point for nonlinear optimization.
 
 The constructed factor graph is optimized using the Levenberg–Marquardt optimizer.
 
-### 5. Trajectory Visualization
+### 5. Incremental Optimization using iSAM2
+
+The project also implements incremental optimization using GTSAM's iSAM2 algorithm.
+Instead of optimizing the entire graph from scratch after every new measurement, iSAM2 incrementally updates the solution as new poses and constraints are introduced.
+
+The implementation includes:
+
+1. Incremental insertion of new pose estimates.
+2. Addition of odometry and loop-closure constraints.
+3. Periodic updates to the factor graph.
+4. Retrieval of the current optimized trajectory.
+5. The number of new poses introduced per update can be configured.
+
+### 6. Trajectory Visualization
 
 Initial and optimized pose estimates are exported to CSV files.
 A Python script using Matplotlib is used to visualize and compare the trajectories.
@@ -67,13 +86,17 @@ A Python script using Matplotlib is used to visualize and compare the trajectori
 pose_graph_slam/
 │
 ├── src/
-│   └── main.cpp
+│   ├── main.cpp
+│   └── isam2.cpp
 │
 ├── data/
 │   └── input_INTEL_g2o.g2o
 │
 ├── results/
-│   └── trajectory_comparison.png
+│   └── Figure_1.png
+|   └── initialFile.csv
+|   └── optimizedFile_batch_SLAM.csv
+|   └── optimizedFile_isam2.csv
 │
 ├── plot.py
 ├── CMakeLists.txt
@@ -113,6 +136,7 @@ cmake --build . -j$(nproc)
 From the build directory, execute:
 ```bash
 ./pose_graph_slam
+./isam2
 ```
 ## Visualizing Results
 
@@ -120,7 +144,7 @@ After running the C++ executable, navigate to the project root and execute:
 ```bash
 python3 plot.py
 ```
-The visualization compares the initial trajectory against the optimized trajectory.
+The visualization compares the initial trajectory against the optimized trajectories.
 
 ## Results
 
