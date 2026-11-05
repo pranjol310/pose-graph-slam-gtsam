@@ -18,16 +18,14 @@ int main(){
     Values initialEstimate;
 
     ifstream file("../data/input_INTEL_g2o.g2o");
-    if( !file.is_open()){
+    if(!file.is_open()){
         cerr<<"Error: Unable to open file"<<endl;
         return 1;
     }
-
     string line;
     int id, id1, id2;
     double x,y,theta;
     double dx, dy, dtheta, l11, l12, l13, l22, l23, l33;
-
     while(getline(file,line)){
         stringstream ss(line);
         string tag;
@@ -48,7 +46,6 @@ int main(){
             graph.add( BetweenFactor<Pose2>(Symbol('x',id1), Symbol('x',id2), measurement, nmodel));
         }
     }
-
     file.close();
 
     Vector3 sigmas(1e-3, 1e-3, 1e-3); 
@@ -64,12 +61,14 @@ int main(){
     params.setRelativeErrorTol(0);
     params.setAbsoluteErrorTol(0);
     params.setlambdaUpperBound(1e12);
+
     Values result = LevenbergMarquardtOptimizer(graph, initialEstimate, params).optimize();
-    ofstream initialFile("initialFile.csv");
-    ofstream optimizedFile("optimizedFile.csv");
+
+    ofstream initialFile("../results/initialFile.csv");
+    ofstream output("../results/optimizedFile_batch_SLAM.csv");
 
     initialFile<< "id,x,y,theta\n";
-    optimizedFile<< "id,x,y,theta\n";
+    output<< "id,x,y,theta\n";
 
     for(auto const& keyVal:initialEstimate){
         Key key=keyVal.key;
@@ -78,12 +77,10 @@ int main(){
         Pose2 optimizedPose = result.at<Pose2>(key);
 
         initialFile<< symbol.index() <<","<< initialPose.x()<<","<< initialPose.y() <<","<< initialPose.theta()<< "\n";
-        optimizedFile<< symbol.index() <<","<< optimizedPose.x() <<","<< optimizedPose.y() <<","<< optimizedPose.theta()<< "\n";
+        output<< symbol.index() <<","<< optimizedPose.x() <<","<< optimizedPose.y() <<","<< optimizedPose.theta()<< "\n";
     }
-
     initialFile.close();
-    optimizedFile.close();
-
-    cout << "final error:   " << graph.error(result) << endl;
+    output.close();
+    cout<< "final error:" << graph.error(result) << endl;
 
 }
