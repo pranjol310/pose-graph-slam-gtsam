@@ -49,21 +49,6 @@ int main(){
                           l13,l23,l33;
             Pose2 measurement(dx, dy, dtheta);
             edges.push_back({id1, id2, measurement, information});
-
-            double maxEntry = information.cwiseAbs().maxCoeff();
-            if(maxEntry > 1e8)
-            {   
-                cout << "Large information value found!" << endl;
-                cout << "Edge: " << id1 << " -> " << id2 << endl;
-                cout << information << endl;
-            } 
-            
-            cout << "\nEdge: " << id1<< " -> " << id2 << endl;
-            cout << "Information matrix:\n"<< information << endl;
-
-            Eigen::SelfAdjointEigenSolver<Matrix3> solver(information);
-
-            cout << "Eigenvalues: "<< solver.eigenvalues().transpose() << endl;
         }
     }
     file.close();
